@@ -223,6 +223,3 @@ Passwords:
 - CI/CD pipeline
 
 ---
-
-## Author
-Vignesh V
