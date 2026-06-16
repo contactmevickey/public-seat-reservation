@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f4f6f8;
+  font-family: Inter, Arial, sans-serif;
+  color: #1f2937;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px;
+}
+
+.page-title {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+button {
+  cursor: pointer;
+}

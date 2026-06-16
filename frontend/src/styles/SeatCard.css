@@ -1,0 +1,54 @@
+.seat-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,.08);
+  transition: all .2s ease;
+}
+
+.seat-card:hover {
+  transform: translateY(-4px);
+}
+
+.seat-number {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.status {
+  margin: 20px 0;
+  font-weight: 600;
+}
+
+.available {
+  border-top: 6px solid #22c55e;
+}
+
+.held {
+  border-top: 6px solid #f59e0b;
+}
+
+.reserved {
+  border-top: 6px solid #ef4444;
+}
+
+.reserve-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  background: #22c55e;
+}
+
+.pay-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  background: #2563eb;
+}
