@@ -9,6 +9,12 @@ export class SeatsService {
 
   async getSeats() {
     const seats = await this.prisma.seat.findMany({
+      take: 3,
+      where: {
+        status: {
+          in: ['AVAILABLE', 'HELD'],
+        },
+      },
       include: {
         reservations: true,
       },
