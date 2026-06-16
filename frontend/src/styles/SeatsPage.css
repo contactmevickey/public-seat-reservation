@@ -1,0 +1,13 @@
+.seat-grid-title {
+  margin: 16px;
+  padding-left: 24px;
+  text-align: left;
+}
+
+.seat-grid {
+  padding: 0 40px;
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
