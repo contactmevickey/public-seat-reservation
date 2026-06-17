@@ -19,7 +19,6 @@ export class AuthService {
   ) {}
 
   async register(dto: RegisterDto) {
-
     const hash = await bcrypt.hash(
       dto.password,
       10,
@@ -67,7 +66,6 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
-
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
@@ -98,15 +96,80 @@ export class AuthService {
         10,
       );
 
+    await this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        refreshTokenHash,
+      },
+    });
+
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+      },
+      ...tokens,
+    };
+  }
+
+  async refresh(refreshToken: string) {
+    try {
+      if (!refreshToken) {
+        throw new UnauthorizedException();
+      }
+
+      const payload =
+        await this.jwtService.verifyAsync(
+          refreshToken,
+        );
+
+      const user =
+        await this.prisma.user.findUnique({
+          where: {
+            id: payload.sub,
+          },
+        });
+
+      if (!user || !user.refreshTokenHash) {
+        throw new UnauthorizedException();
+      }
+
+      const valid =
+        await bcrypt.compare(
+          refreshToken,
+          user.refreshTokenHash,
+        );
+
+      if (!valid) {
+        throw new UnauthorizedException();
+      }
+
+      const tokens =
+        await this.generateTokens(
+          user.id,
+          user.email,
+        );
+
       await this.prisma.user.update({
         where: {
           id: user.id,
         },
         data: {
-          refreshTokenHash,
+          refreshTokenHash:
+            await bcrypt.hash(
+              tokens.refreshToken,
+              10,
+            ),
         },
       });
 
-    return tokens;
+      return tokens;
+    } catch {
+      throw new UnauthorizedException(
+        'Invalid refresh token',
+      );
+    }
   }
 }

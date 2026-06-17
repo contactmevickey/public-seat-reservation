@@ -13,7 +13,8 @@ type AuthContextType = {
   user: User | null;
   login: (
     user: User,
-    accessToken: string
+    accessToken: string,
+    refreshToken: string
   ) => void;
   logout: () => void;
 };
@@ -31,11 +32,17 @@ export const AuthProvider = ({
 
   const handleLogin = (
     user: User,
-    accessToken: string
+    accessToken: string,
+    refreshToken: string
   ) => {
     localStorage.setItem(
       "accessToken",
       accessToken
+    );
+
+    localStorage.setItem(
+      "refreshToken",
+      refreshToken
     );
 
     setUser(user);
