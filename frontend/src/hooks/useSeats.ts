@@ -6,6 +6,6 @@ export const useSeats = () => {
     queryKey: ["seats"],
     queryFn: getSeats,
 
-    refetchInterval: 500000,
+    refetchInterval: 60 * 1000,
   });
 };

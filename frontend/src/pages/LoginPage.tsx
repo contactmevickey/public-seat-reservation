@@ -28,7 +28,8 @@ export default function LoginPage() {
 
       login(
         data.user,
-        data.accessToken
+        data.accessToken,
+        data.refreshToken
       );
 
       navigate("/seats");

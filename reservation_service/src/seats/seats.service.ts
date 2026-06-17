@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { ReservationsService } from '../reservations/reservations.service';
 
 @Injectable()
 export class SeatsService {
   constructor(
     private readonly prisma: PrismaService,
+    private readonly reservationsService: ReservationsService,
   ) {}
 
   async getSeats() {
+    await this.reservationsService.releaseExpiredReservations();
+
     const seats = await this.prisma.seat.findMany({
       take: 3,
       where: {
@@ -16,7 +20,15 @@ export class SeatsService {
         },
       },
       include: {
-        reservations: true,
+        reservations: {
+          where: {
+            status: 'PENDING',
+          },
+          orderBy: {
+            id: 'desc',
+          },
+          take: 1,
+        },
       },
       orderBy: {
         seatNumber: 'asc',

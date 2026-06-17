@@ -4,7 +4,7 @@ import "../styles/SeatCard.css";
 
 type Props = {
   seat: Seat;
-  currentUserId: number;
+  currentUserId: number | null;
   onReserve: (seat: Seat) => void;
   onPay: (reservationId: number) => void;
 };
@@ -19,18 +19,20 @@ export default function SeatCard({
     seat.status === "HELD" &&
     seat.heldBy === currentUserId;
 
+  const reservationId = seat.reservationId;
+
   const getClass = () => {
     switch (seat.status) {
       case "AVAILABLE":
-        return "seat available";
+        return "seat-card available";
 
       case "HELD":
         return isHeldByMe
-          ? "seat held-me"
-          : "seat held";
+          ? "seat-card held held-me"
+          : "seat-card held";
 
       case "RESERVED":
-        return "seat reserved";
+        return "seat-card reserved";
 
       default:
         return "";
@@ -38,7 +40,7 @@ export default function SeatCard({
   };
 
   return (
-    <div className={`seat-card ${seat.status.toLowerCase()}`}>
+    <div className={getClass()}>
       <h2 className="seat-number">
         {seat.seatNumber}
       </h2>
@@ -56,11 +58,11 @@ export default function SeatCard({
         </button>
       )}
 
-      {isHeldByMe && (
+      {isHeldByMe && reservationId && (
         <button
           className="pay-btn"
           onClick={() =>
-            onPay(seat.reservationId!)
+            onPay(reservationId)
           }
         >
           Pay Now

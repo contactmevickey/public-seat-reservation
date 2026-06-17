@@ -15,6 +15,7 @@ export class ReservationsService {
     userId: number,
     seatId: number,
   ) {
+    await this.releaseExpiredReservations();
 
     const seat = await this.prisma.seat.findUnique({
       where: { id: seatId },
@@ -23,10 +24,6 @@ export class ReservationsService {
     if (!seat) {
       throw new BadRequestException('Seat not found');
     }
-
-    // Release expired reservations before checking seat availability
-    // We can also make this as cron job to run every 3 minutes to cleanup before user tries to reserve a seat.
-    await this.releaseExpiredReservations();
 
     if (seat.status !== 'AVAILABLE') {
       throw new BadRequestException(
@@ -68,7 +65,7 @@ export class ReservationsService {
   }
 
   // Cleanup function to release expired reservations and make seats available again
-  private async releaseExpiredReservations() {
+  async releaseExpiredReservations() {
     const expiredReservations =
       await this.prisma.reservation.findMany({
         where: {
